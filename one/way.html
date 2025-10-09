@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge Learning Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .nav-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            font-size: 1em;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+        }
+
+        .challenge-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .challenge-card {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .challenge-card:hover {
+            transform: translateY(-5px);
+            border-color: #667eea;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .challenge-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .challenge-detail {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .challenge-detail h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .section h3 {
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .section p {
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .search-box {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #667eea;
+            border-radius: 50px;
+            font-size: 1.1em;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            font-size: 1.3em;
+        }
+
+        .search-results {
+            margin-top: 20px;
+        }
+
+        .result-item {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .result-item h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .result-item .keyword-highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .learning-card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #f5576c;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .learning-card h4 {
+            color: #f5576c;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .random-learning {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .random-learning h3 {
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .tag {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Challenge Learning Tracker</h1>
+            <p>Organize, Track, and Master Your Challenges</p>
+        </div>
+
+        <div class="content">
+            <!-- Index Page -->
+            <div id="indexPage">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="🔍 Search for concepts, keywords, topics...">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn btn-primary" onclick="showLevels()">📚 Levels</button>
+                    <button class="btn btn-secondary" onclick="showLearnings()">💡 Learnings</button>
+                </div>
+            </div>
+
+            <!-- Levels Page -->
+            <div id="levelsPage" class="hidden">
+                <button class="back-btn" onclick="showIndex()">← Back to Index</button>
+                <h2 style="margin-bottom: 20px; color: #667eea;">Select a Challenge</h2>
+                <div class="challenge-list" id="challengeList"></div>
+            </div>
+
+            <!-- Challenge Detail Page -->
+            <div id="challengeDetailPage" class="hidden">
+                <button class="back-btn" onclick="showLevels()">← Back to Challenges</button>
+                <div id="challengeDetail"></div>
+            </div>
+
+            <!-- Learnings Page -->
+            <div id="learningsPage" class="hidden">
+                <button class="back-btn" onclick="showIndex()">← Back to Index</button>
+                <h2 style="margin-bottom: 20px; color: #667eea;">Learning Options</h2>
+                <div class="nav-buttons">
+                    <button class="btn btn-warning" onclick="showRandomLearning()">🎲 Revise Random</button>
+                    <button class="btn btn-success" onclick="showAllLearnings()">📖 Show All</button>
+                </div>
+                <div id="learningContent" style="margin-top: 30px;"></div>
+            </div>
+
+            <!-- Search Results Page -->
+            <div id="searchResultsPage" class="hidden">
+                <button class="back-btn" onclick="showIndex()">← Back to Index</button>
+                <h2 style="margin-bottom: 20px; color: #667eea;">Search Results</h2>
+                <div id="searchResults" class="search-results"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data structure - You can modify this to add your challenges
+        const challenges = {
+            'chlng1': {
+                name: 'Challenge 1',
+                overview: 'This is an overview of Challenge 1. Describe what the challenge is about and what needs to be solved.',
+                hint: 'Think about the data structure that would be most efficient for this problem. Consider time complexity.',
+                method: 'Step 1: Analyze the problem\nStep 2: Choose appropriate algorithm\nStep 3: Implement the solution\nStep 4: Test with edge cases',
+                learning: 'Key concepts: Arrays, Sorting, Time Complexity O(n log n). This challenge teaches efficient data manipulation.',
+                concepts: ['arrays', 'sorting', 'time complexity', 'algorithms']
+            },
+            'chlng2': {
+                name: 'Challenge 2',
+                overview: 'Overview of Challenge 2. This challenge focuses on different aspects of problem-solving.',
+                hint: 'Consider using recursion or dynamic programming. Break the problem into smaller subproblems.',
+                method: 'Step 1: Define base cases\nStep 2: Find recursive relation\nStep 3: Memoize results\nStep 4: Optimize space',
+                learning: 'Key concepts: Recursion, Dynamic Programming, Memoization. Understanding how to optimize recursive solutions.',
+                concepts: ['recursion', 'dynamic programming', 'memoization', 'optimization']
+            },
+            'chlng3': {
+                name: 'Challenge 3',
+                overview: 'Overview of Challenge 3. This explores advanced problem-solving techniques.',
+                hint: 'Graph traversal might be useful here. Think about BFS vs DFS and which is more appropriate.',
+                method: 'Step 1: Model as graph\nStep 2: Choose traversal method\nStep 3: Handle visited nodes\nStep 4: Return solution path',
+                learning: 'Key concepts: Graphs, BFS, DFS, Tree Traversal. Learning when to use different graph algorithms.',
+                concepts: ['graphs', 'bfs', 'dfs', 'tree traversal', 'graph algorithms']
+            }
+        };
+
+        let currentChallenge = null;
+
+        // Initialize
+        document.getElementById('searchInput').addEventListener('input', handleSearch);
+
+        function showIndex() {
+            hideAllPages();
+            document.getElementById('indexPage').classList.remove('hidden');
+            document.getElementById('searchInput').value = '';
+        }
+
+        function showLevels() {
+            hideAllPages();
+            document.getElementById('levelsPage').classList.remove('hidden');
+            renderChallengeList();
+        }
+
+        function showLearnings() {
+            hideAllPages();
+            document.getElementById('learningsPage').classList.remove('hidden');
+            document.getElementById('learningContent').innerHTML = '';
+        }
+
+        function hideAllPages() {
+            document.getElementById('indexPage').classList.add('hidden');
+            document.getElementById('levelsPage').classList.add('hidden');
+            document.getElementById('challengeDetailPage').classList.add('hidden');
+            document.getElementById('learningsPage').classList.add('hidden');
+            document.getElementById('searchResultsPage').classList.add('hidden');
+        }
+
+        function renderChallengeList() {
+            const list = document.getElementById('challengeList');
+            list.innerHTML = '';
+            
+            for (let key in challenges) {
+                const card = document.createElement('div');
+                card.className = 'challenge-card';
+                card.onclick = () => showChallengeDetail(key);
+                
+                card.innerHTML = `
+                    <h3>${challenges[key].name}</h3>
+                    <p>${challenges[key].overview.substring(0, 100)}...</p>
+                    <div class="tags">
+                        ${challenges[key].concepts.slice(0, 3).map(c => `<span class="tag">${c}</span>`).join('')}
+                    </div>
+                `;
+                
+                list.appendChild(card);
+            }
+        }
+
+        function showChallengeDetail(challengeKey) {
+            currentChallenge = challengeKey;
+            hideAllPages();
+            document.getElementById('challengeDetailPage').classList.remove('hidden');
+            
+            const challenge = challenges[challengeKey];
+            const detailDiv = document.getElementById('challengeDetail');
+            
+            detailDiv.innerHTML = `
+                <div class="challenge-detail">
+                    <h2>${challenge.name}</h2>
+                    
+                    <div class="section">
+                        <h3>📋 Overview</h3>
+                        <p>${challenge.overview}</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>💡 Hint</h3>
+                        <p>${challenge.hint}</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>🔧 Method</h3>
+                        <p style="white-space: pre-line;">${challenge.method}</p>
+                    </div>
+                    
+                    <div class="section">
+                        <h3>🎓 Learning</h3>
+                        <p>${challenge.learning}</p>
+                        <div class="tags">
+                            ${challenge.concepts.map(c => `<span class="tag">${c}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showRandomLearning() {
+            const keys = Object.keys(challenges);
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            const challenge = challenges[randomKey];
+            
+            document.getElementById('learningContent').innerHTML = `
+                <div class="random-learning">
+                    <h3>🎲 Random Learning from ${challenge.name}</h3>
+                    <p style="font-size: 1.1em; line-height: 1.8;">${challenge.learning}</p>
+                    <div class="tags" style="margin-top: 20px;">
+                        ${challenge.concepts.map(c => `<span class="tag" style="background: white; color: #f5576c;">${c}</span>`).join('')}
+                    </div>
+                </div>
+                <button class="btn btn-warning" onclick="showRandomLearning()">🔄 Get Another Random Learning</button>
+            `;
+        }
+
+        function showAllLearnings() {
+            let html = '<h3 style="color: #667eea; margin-bottom: 20px;">All Learnings</h3>';
+            
+            for (let key in challenges) {
+                const challenge = challenges[key];
+                html += `
+                    <div class="learning-card">
+                        <h4>${challenge.name}</h4>
+                        <p>${challenge.learning}</p>
+                        <div class="tags">
+                            ${challenge.concepts.map(c => `<span class="tag">${c}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('learningContent').innerHTML = html;
+        }
+
+        function handleSearch(e) {
+            const query = e.target.value.toLowerCase().trim();
+            
+            if (query.length < 2) {
+                return;
+            }
+            
+            const results = [];
+            
+            for (let key in challenges) {
+                const challenge = challenges[key];
+                const searchText = `${challenge.overview} ${challenge.hint} ${challenge.method} ${challenge.learning} ${challenge.concepts.join(' ')}`.toLowerCase();
+                
+                if (searchText.includes(query)) {
+                    results.push({
+                        key: key,
+                        name: challenge.name,
+                        matchedIn: [],
+                        concepts: challenge.concepts.filter(c => c.toLowerCase().includes(query))
+                    });
+                    
+                    if (challenge.overview.toLowerCase().includes(query)) results[results.length-1].matchedIn.push('Overview');
+                    if (challenge.hint.toLowerCase().includes(query)) results[results.length-1].matchedIn.push('Hint');
+                    if (challenge.method.toLowerCase().includes(query)) results[results.length-1].matchedIn.push('Method');
+                    if (challenge.learning.toLowerCase().includes(query)) results[results.length-1].matchedIn.push('Learning');
+                }
+            }
+            
+            if (results.length > 0) {
+                showSearchResults(query, results);
+            }
+        }
+
+        function showSearchResults(query, results) {
+            hideAllPages();
+            document.getElementById('searchResultsPage').classList.remove('hidden');
+            
+            let html = `<p style="margin-bottom: 20px; font-size: 1.1em;">Found <strong>${results.length}</strong> challenge(s) containing "<span class="keyword-highlight">${query}</span>"</p>`;
+            
+            results.forEach(result => {
+                html += `
+                    <div class="result-item" onclick="showChallengeDetail('${result.key}')">
+                        <h4>${result.name}</h4>
+                        <p><strong>Found in:</strong> ${result.matchedIn.join(', ')}</p>
+                        ${result.concepts.length > 0 ? `
+                            <div class="tags">
+                                ${result.concepts.map(c => `<span class="tag">${c}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            
+            document.getElementById('searchResults').innerHTML = html;
+        }
+    </script>
+</body>
+</html>
